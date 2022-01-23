@@ -1,0 +1,151 @@
+﻿<Window x:Class="Simatic.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:HelixToolkit="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
+        xmlns:local="clr-namespace:Simatic"
+        mc:Ignorable="d"
+        Title="Simatic" Width="1280" Height="960"  
+        d:DesignHeight="1080" d:DesignWidth="1920">
+    <!--Height="450" Width="800"-->
+
+    <Grid>
+        <HelixToolkit:HelixViewport3D x:Name="viewPort3d"
+                                      ViewCubeHeight="150" 
+                                      ViewCubeWidth="150" 
+                                      ViewCubeVerticalPosition="Bottom" 
+                                      CoordinateSystemLabelForeground="White" 
+                                      CoordinateSystemVerticalPosition="Center" 
+                                      CoordinateSystemHorizontalPosition="Right" 
+                                      CoordinateSystemHeight="150" 
+                                      CoordinateSystemWidth="150" 
+                                      RenderOptions.BitmapScalingMode="HighQuality" 
+                                      RenderOptions.EdgeMode="Unspecified" 
+                                      BorderBrush="Black" 
+                                      BorderThickness="5" 
+                                      ShowCoordinateSystem="True" 
+                                      ShowFrameRate="True" 
+                                      ShowCameraInfo="True" 
+                                      MouseLeftButtonUp="ViewPort3D_OnMouseLeftButtonUp" 
+                                      MouseLeftButtonDown="ViewPort3D_OnMouseLeftButtonDown" 
+                                      IsManipulationEnabled="True" 
+                                      IsViewCubeEdgeClicksEnabled="True" Margin="0,13,0,-13">
+            <HelixToolkit:HelixViewport3D.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF060A13" Offset="0"/>
+                    <GradientStop Color="#FF1D64FF" Offset="1"/>
+                </LinearGradientBrush>
+            </HelixToolkit:HelixViewport3D.Background>
+            <!-- Remember to add light to the scene -->
+            <HelixToolkit:SunLight/>
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <GeometryModel3D>
+                        <GeometryModel3D.Geometry>
+                            <MeshGeometry3D x:Name="meshMain"
+                                Positions="0 0 0  1 0 0  0 1 0  1 1 0  0 0 1  1 0 1  0 1 1  1 1 1"
+                                TriangleIndices="2 3 1  2 1 0  7 1 3  7 5 1  6 5 7  6 4 5  6 2 0  2 0 4  2 7 3  2 6 7  0 1 5  0 5 4">
+                            </MeshGeometry3D>
+                        </GeometryModel3D.Geometry>
+                        <GeometryModel3D.Material>
+                            <DiffuseMaterial x:Name="matDiffuseMain">
+                                <DiffuseMaterial.Brush>
+                                    <SolidColorBrush Color="Gray"/>
+                                </DiffuseMaterial.Brush>
+                            </DiffuseMaterial>
+                        </GeometryModel3D.Material>
+                    </GeometryModel3D>
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+            <!--<HelixToolkit:GridLinesVisual3D Width="8" Length="8" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>-->
+            <HelixToolkit:GridLinesVisual3D Width="16000" Length="16000" Thickness="1.5" MinorDistance="100" MajorDistance="400" Fill="#E5CFCECE" />
+        </HelixToolkit:HelixViewport3D>
+
+        <Rectangle Fill="#FFFBFBFB" HorizontalAlignment="Left" VerticalAlignment="Top" Height="289" Stroke="Black"  Width="306" StrokeThickness="0.5" Margin="4,4,0,0"/>
+
+        <Label x:Name="lblForwardKinematics" Content="Cinemática Directa" HorizontalAlignment="Left" Margin="14,10,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" FontSize="14"/>
+
+        <!-- Slider J1-->
+        <Label Content="J1" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider x:Name="sldJoint1" x:Uid="1" HorizontalAlignment="Left" Margin="46,45,0,0" VerticalAlignment="Top" Width="210" Maximum="180" Minimum="-180" ValueChanged="Joint_ValueChanged" MouseEnter="Joint_MouseEnter" MouseLeave="Joint_MouseLeave" LargeChange="0.1" TickFrequency="0.1" Height="22"/>
+        <Label x:Name="J1Value" HorizontalAlignment="Left" Margin="255,41,0,0"  VerticalAlignment="Top" Width="50" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJoint1}" Height="22" ContentStringFormat="{}{0:0.##}" VerticalContentAlignment="Center"    />
+        <!-- Slider J2-->
+        <Label Content="J2" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider x:Name="sldJoint2" x:Uid="2" HorizontalAlignment="Left" Margin="45,75,0,0" VerticalAlignment="Top" Width="210" Maximum="90" Minimum="-90" ValueChanged="Joint_ValueChanged" MouseEnter="Joint_MouseEnter" MouseLeave="Joint_MouseLeave" LargeChange="0.1" TickFrequency="0.1" Height="22"/>
+        <Label x:Name="J2Value" HorizontalAlignment="Left" Margin="254,71,0,0"  VerticalAlignment="Top" Width="50" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJoint2}" Height="22" ContentStringFormat="{}{0:0.##}" VerticalContentAlignment="Center"    />
+        <!-- Slider J3-->
+        <Label Content="J3" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider x:Name="sldJoint3" x:Uid="3" HorizontalAlignment="Left" Margin="44,105,0,0" VerticalAlignment="Top" Width="210" Maximum="80" Minimum="-180" ValueChanged="Joint_ValueChanged" MouseEnter="Joint_MouseEnter" MouseLeave="Joint_MouseLeave" LargeChange="0.1" TickFrequency="0.1" Height="22"/>
+        <Label x:Name="J3Value" HorizontalAlignment="Left" Margin="253,101,0,0"  VerticalAlignment="Top" Width="50" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJoint3}" Height="22" ContentStringFormat="{}{0:0.##}" VerticalContentAlignment="Center"    />
+        <!-- Slider J4-->
+        <Label Content="J4" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider x:Name="sldJoint4" x:Uid="4" HorizontalAlignment="Left" Margin="42,135,0,0" VerticalAlignment="Top" Width="210" Maximum="180" Minimum="-180" ValueChanged="Joint_ValueChanged" MouseEnter="Joint_MouseEnter" MouseLeave="Joint_MouseLeave" LargeChange="0.1" TickFrequency="0.1" Height="22"/>
+        <Label x:Name="J4Value" HorizontalAlignment="Left" Margin="251,131,0,0"  VerticalAlignment="Top" Width="50" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJoint4}" Height="22" ContentStringFormat="{}{0:0.##}" VerticalContentAlignment="Center"    />
+        <!-- Slider J5-->
+        <Label Content="J5" HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider x:Name="sldJoint5" x:Uid="5" HorizontalAlignment="Left" Margin="43,165,0,0" VerticalAlignment="Top" Width="210" Maximum="115" Minimum="-115" ValueChanged="Joint_ValueChanged" MouseEnter="Joint_MouseEnter" MouseLeave="Joint_MouseLeave" LargeChange="0.1" TickFrequency="0.1" Height="22"/>
+        <Label x:Name="J5Value" HorizontalAlignment="Left" Margin="253,161,0,0"  VerticalAlignment="Top" Width="50" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJoint5}" Height="22" ContentStringFormat="{}{0:0.##}" VerticalContentAlignment="Center"    />
+        <!-- Slider J6-->
+        <Label Content="J6" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider x:Name="sldJoint6" x:Uid="6" HorizontalAlignment="Left" Margin="47,195,0,0" VerticalAlignment="Top" Width="210" Maximum="180" Minimum="-180" ValueChanged="Joint_ValueChanged" MouseEnter="Joint_MouseEnter" MouseLeave="Joint_MouseLeave" LargeChange="0.1" TickFrequency="0.1" Height="22"/>
+        <Label x:Name="J6Value" HorizontalAlignment="Left" Margin="255,191,0,0"  VerticalAlignment="Top" Width="50" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJoint6}" Height="22" ContentStringFormat="{}{0:0.##}" VerticalContentAlignment="Center"    />
+
+        <Label Content="X" HorizontalAlignment="Left" Margin="15,228,0,0" VerticalAlignment="Top" Foreground="Black" Height="25"/>
+        <Label x:Name="Tx" HorizontalAlignment="Left" Margin="32,228,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" Width="63" ContentStringFormat="{}{0:0.##}"/>
+        <Label Content="Y:" HorizontalAlignment="Left" Margin="105,228,0,0" VerticalAlignment="Top" Foreground="Black" Height="25"/>
+        <Label x:Name="Ty" HorizontalAlignment="Left" Margin="122,228,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" Width="67" ContentStringFormat="{}{0:0.##}"/>
+        <Label Content="Z:" HorizontalAlignment="Left" Margin="201,228,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" />
+        <Label x:Name="Tz" HorizontalAlignment="Left" Margin="218,228,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" Width="62" ContentStringFormat="{}{0:0.##}"/>
+        <Label Content="X" HorizontalAlignment="Left" Margin="35,258,0,0" VerticalAlignment="Top" Foreground="Black" Height="25"/>
+        <Label x:Name="Tx_Copy" HorizontalAlignment="Left" Margin="52,258,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" Width="63" ContentStringFormat="{}{0:0.##}"/>
+        <Label Content="Y:" HorizontalAlignment="Left" Margin="125,258,0,0" VerticalAlignment="Top" Foreground="Black" Height="25"/>
+        <Label x:Name="Ty_Copy" HorizontalAlignment="Left" Margin="142,258,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" Width="67" ContentStringFormat="{}{0:0.##}"/>
+        <Label Content="Z:" HorizontalAlignment="Left" Margin="221,258,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" />
+        <Label x:Name="Tz_Copy" HorizontalAlignment="Left" Margin="238,258,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" Width="62" ContentStringFormat="{}{0:0.##}"/>
+
+        <!--<Rectangle Fill="#FFFBFBFB" HorizontalAlignment="Left" VerticalAlignment="Top" Height="274" Stroke="Black"  Width="306" StrokeThickness="0.5" Margin="4,298,0,0"/>-->
+        <Rectangle Fill="#FFFBFBFB" HorizontalAlignment="Left" VerticalAlignment="Top" Height="189" Stroke="Black"  Width="306" StrokeThickness="0.5" Margin="4,298,0,0"/>
+
+        <Label x:Name="lblInverseKinematics" Content="Cinemática Inversa" HorizontalAlignment="Left" Margin="14,305,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" FontSize="14"/>
+
+        <Label Content="X" HorizontalAlignment="Left" Margin="15,339,0,0" VerticalAlignment="Top" Foreground="Black" Height="23" RenderTransformOrigin="0.765,-3.13"/>
+        <TextBox x:Name="TbX" Text="1500" HorizontalAlignment="Left" Height="23" Margin="32,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+        <Label Content="Y" HorizontalAlignment="Left" Margin="85,339,0,0" VerticalAlignment="Top" Foreground="Black" Height="24"/>
+        <TextBox x:Name="TbY" Text="0" HorizontalAlignment="Left" Height="24" Margin="100,340,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="51" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+        <Label Content="Z" HorizontalAlignment="Left" Margin="156,339,0,0" VerticalAlignment="Top" Foreground="Black" Height="23"/>
+        <TextBox x:Name="TbZ" Text="1750" HorizontalAlignment="Left" Height="24" Margin="173,340,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+
+        <Button x:Name="button" Content="Run" HorizontalAlignment="Left" Margin="231,339,0,0" VerticalAlignment="Top" Width="65" Height="25" FontSize="11" Click="StartInverseKinematics"/>
+
+        <Label Content="X" HorizontalAlignment="Left" Margin="10,375,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider x:Name="sldJointX" HorizontalAlignment="Left" Margin="46,379,0,0" VerticalAlignment="Top" Width="210"  Maximum="3000" ValueChanged="RotationPoint_Changed" Height="22" SmallChange="1" IsSnapToTickEnabled="True" Minimum="-3000"/>
+        <Label x:Name="jointXValue" HorizontalAlignment="Left" Margin="255,375,0,0"  VerticalAlignment="Top" Width="50" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJointX}" Height="22" VerticalContentAlignment="Center"    />
+        <Label Content="Y" HorizontalAlignment="Left" Margin="10,410,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider x:Name="sldJointY" HorizontalAlignment="Left" Margin="46,414,0,0" VerticalAlignment="Top" Width="210"  Maximum="3000" ValueChanged="RotationPoint_Changed" Height="22" SmallChange="1" IsSnapToTickEnabled="True" Minimum="-3000"/>
+        <Label x:Name="jointYValue" HorizontalAlignment="Left" Margin="255,414,0,0"  VerticalAlignment="Top" Width="50" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJointY}" Height="22" VerticalContentAlignment="Center"    />
+        <Label Content="Z" HorizontalAlignment="Left" Margin="11,445,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider x:Name="sldJointZ" HorizontalAlignment="Left" Margin="47,449,0,0" VerticalAlignment="Top" Width="210"  Maximum="3000" ValueChanged="RotationPoint_Changed" Height="22" SmallChange="1" IsSnapToTickEnabled="True" Minimum="-3000"/>
+        <Label x:Name="jointZValue" HorizontalAlignment="Left" Margin="256,449,0,0"  VerticalAlignment="Top" Width="50" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJointZ}" Height="22" VerticalContentAlignment="Center"    />
+
+
+
+        <Label Visibility="Hidden" Content="Joint" HorizontalAlignment="Left" Margin="11,482,0,0" VerticalAlignment="Top" Width="53" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Slider Visibility="Hidden" x:Name="sldJointSelector" HorizontalAlignment="Left" Margin="69,487,0,0" VerticalAlignment="Top" Width="210"  Maximum="6" ValueChanged="JointSelector_ValueChanged" Height="22" SmallChange="1" IsSnapToTickEnabled="True"/>
+        <Label Visibility="Hidden" x:Name="jointSelected" HorizontalAlignment="Left" Margin="278,487,0,0"  VerticalAlignment="Top" Width="24" Foreground="Black" FontSize="10" Content="{Binding Value, ElementName=sldJointSelector}" Height="22" VerticalContentAlignment="Center"    />
+
+        <Label Visibility="Hidden" Content="X" HorizontalAlignment="Left" Margin="15,512,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <CheckBox Visibility="Hidden" x:Name="jointXAxis" Content="" HorizontalAlignment="Left" Margin="45,521,0,0" VerticalAlignment="Top" Checked="CheckBox_StateChanged" Unchecked="CheckBox_StateChanged"/>
+        <Label Visibility="Hidden" Content="Y" HorizontalAlignment="Left" Margin="91,512,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <CheckBox Visibility="Hidden" x:Name="jointYAxis" Content="" HorizontalAlignment="Left" Margin="121,521,0,0" VerticalAlignment="Top" Checked="CheckBox_StateChanged" Unchecked="CheckBox_StateChanged"/>
+        <Label Visibility="Hidden" Content="Z" HorizontalAlignment="Left" Margin="169,512,0,0" VerticalAlignment="Top" Width="30" Foreground="Black" FontSize="14" FontWeight="Bold" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <CheckBox Visibility="Hidden" x:Name="jointZAxis" Content="" HorizontalAlignment="Left" Margin="199,521,0,0" VerticalAlignment="Top" Checked="CheckBox_StateChanged" Unchecked="CheckBox_StateChanged"/>
+
+        <Rectangle Fill="#FFFBFBFB" HorizontalAlignment="Left" VerticalAlignment="Top" Height="143" Stroke="Black"  Width="306" StrokeThickness="0.5" Margin="4,492,0,0"/>
+        <Label x:Name="lblInstruction" Content="Posicionamiento de la vista con el ratón" HorizontalAlignment="Left" Margin="14,501,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" FontSize="14" Width="286"/>
+        <TextBox x:Name="txtIzq" HorizontalAlignment="Left" Height="23" Margin="44,541,0,0" TextWrapping="Wrap" Text="Botón Izq.: Mueve la vista." VerticalAlignment="Top" Width="179"/>
+        <TextBox x:Name="txtWhell" HorizontalAlignment="Left" Height="23" Margin="44,569,0,0" TextWrapping="Wrap" Text="Rueda: Acerca o aleja la vista." VerticalAlignment="Top" Width="179"/>
+        <TextBox x:Name="txtDcha" HorizontalAlignment="Left" Height="23" Margin="43,597,0,0" TextWrapping="Wrap" Text="Botón Dcho.: Rota la vista." VerticalAlignment="Top" Width="179"/>
+
+    </Grid>
+</Window>
